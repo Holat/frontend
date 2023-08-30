@@ -1,0 +1,23 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.loginPage {
+  background: url("../public/images/retrosupply-jLwVAUtLOAQ-unsplash.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.loginForm {
+  color: white;
+  background-color: rgba(180, 153, 113, 0.57);
+}
+
+.employee-image {
+  width: 40px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
