@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Dashboard() {
+  const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
+  useEffect(() => {
+    axios.get("http://localhost:8081/dashboard").then((res) => {
+      if (res.data.Status === "Success") {
+        if (res.data.role === "admin") {
+          navigate("/");
+        } else {
+          const id = res.data.id;
+          navigate(`/employeeDetail/${id}`);
+        }
+      } else {
+        navigate("/start");
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleLogout = () => {
+    axios
+      .get("http://localhost:8081/logout")
+      .then((res) => {
+        navigate("/start");
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div>
       <div className="container-fluid">
@@ -10,7 +38,7 @@ function Dashboard() {
           <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
             <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
               <Link
-                to={"/"}
+                to={"home"}
                 className="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
               >
                 <span className="fs-5 d-none d-sm-inline">Admin Dashboard</span>
@@ -49,9 +77,9 @@ function Dashboard() {
                     <span className="ms-1 d-none d-sm-inline">Profile</span>
                   </Link>
                 </li>
-                <li>
+                <li onClick={handleLogout}>
                   <Link
-                    to={"/"}
+                    // to={"/"}
                     className="nav-link text-white px-0 align-middle"
                   >
                     <i className="fs-4 bi-power"></i>{" "}

@@ -91,7 +91,7 @@ function AddEmployee() {
         </div>
         <div className=" col-12">
           <label htmlFor="inputSalary" className="form-label">
-            Address
+            Salary
           </label>
           <input
             type="text"

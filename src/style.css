@@ -21,3 +21,9 @@
   aspect-ratio: 1;
   border-radius: 50%;
 }
+
+.empImg {
+  border-radius: 50%;
+  width: 40%;
+  aspect-ratio: 1;
+}

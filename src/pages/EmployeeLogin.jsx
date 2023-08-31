@@ -3,7 +3,7 @@ import "../style.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+function EmployeeLogin() {
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -11,15 +11,16 @@ function Login() {
 
   const [error, setError] = useState("");
 
-  const navigate = useNavigate();
   axios.defaults.withCredentials = true;
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:8081/login", values)
+      .post("http://localhost:8081/employeelogin", values)
       .then((res) => {
         if (res.data.Status === "Success") {
-          navigate("/");
+          const id = res.data.id;
+          navigate(`/employeeDetails/${id}`);
         } else {
           setError(res.data.Error);
         }
@@ -66,14 +67,10 @@ function Login() {
             <p className=" m-0">Do you agree to our policies</p>
             <input type="radio" className=" mt-1" />
           </div>
-
-          {/* <button className="btn  btn-secondary w-100  rounded text-decoration">
-            Create Account
-          </button> */}
         </form>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default EmployeeLogin;

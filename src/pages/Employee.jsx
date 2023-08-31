@@ -16,6 +16,16 @@ function Employee() {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:8081/delete/${id}`)
+      .then((res) => {
+        if (res.data.Status === "Success") {
+          window.location.reload(true);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <div className="px-5 py-3">
       <div className="d-flex justify-content-center">
@@ -59,7 +69,12 @@ function Employee() {
                   >
                     Edit
                   </Link>
-                  <button className="btn btn-sm btn-danger">Delete</button>
+                  <button
+                    onClick={(e) => handleDelete(employee.id)}
+                    className="btn btn-sm btn-danger"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             );

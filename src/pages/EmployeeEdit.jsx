@@ -1,31 +1,51 @@
 import React, { useEffect, useState } from "react";
 import "../style.css";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function EmployeeEdit() {
   const [data, setData] = useState({
     name: "",
     email: "",
-    password: "",
     address: "",
     salary: "",
-    image: "",
   });
 
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
     axios
-      .get("http://localhost:8081/")
-      .then((res) => console.log(res))
+      .get(`http://localhost:8081/get/${id}`)
+      .then((res) => {
+        setData({
+          ...data,
+          name: res.data.result[0].name,
+          email: res.data.result[0].email,
+          address: res.data.result[0].address,
+          salary: res.data.result[0].salary,
+        });
+      })
       .catch((err) => console.log(err));
-  }, [id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    axios
+      .put(`http://localhost:8081/update/${id}`, data)
+      .then((res) => {
+        if (res.data.Status === "Success") {
+          navigate("/employee");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="d-flex flex-column align-items-center pt-5">
-      <h2>Add Employee</h2>
-      <form className="row g-3 w-50">
+      <h2>Update Employee</h2>
+      <form className="row g-3 w-50" onSubmit={handleSubmit}>
         <div className=" col-12">
           <label htmlFor="inputName" className="form-label">
             Name
@@ -35,7 +55,9 @@ function EmployeeEdit() {
             className="form-control"
             id="inputName"
             placeholder="Enter Name"
+            value={data.name}
             onChange={(e) => setData({ ...data, name: e.target.value })}
+            disabled
           />
         </div>
         <div className=" col-12">
@@ -47,19 +69,22 @@ function EmployeeEdit() {
             className="form-control"
             id="inputEmail4"
             placeholder="Enter Email"
+            value={data.email}
             onChange={(e) => setData({ ...data, email: e.target.value })}
+            disabled
           />
         </div>
         <div className=" col-12">
-          <label htmlFor="inputPassword" className="form-label">
-            Password
+          <label htmlFor="inputSalary" className="form-label">
+            Salary
           </label>
           <input
-            type="password"
+            type="text"
             className="form-control"
-            id="inputPassword4"
-            placeholder="Enter password"
-            onChange={(e) => setData({ ...data, password: e.target.value })}
+            id="inputSalary"
+            placeholder="Enter Salary"
+            onChange={(e) => setData({ ...data, salary: e.target.value })}
+            defaultValue={data.salary}
           />
         </div>
         <div className=" col-12">
@@ -71,35 +96,14 @@ function EmployeeEdit() {
             className="form-control"
             id="inputAddress"
             placeholder="1234 Main St"
+            value={data.address}
             onChange={(e) => setData({ ...data, address: e.target.value })}
-          />
-        </div>
-        <div className=" col-12">
-          <label htmlFor="inputSalary" className="form-label">
-            Address
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="inputSalary"
-            placeholder="Enter Salary"
-            onChange={(e) => setData({ ...data, salary: e.target.value })}
-          />
-        </div>
-        <div className=" col-12 mb-3">
-          <label htmlFor="inputGroupFile01" className="form-label">
-            Select Image
-          </label>
-          <input
-            type="file"
-            className="form-control"
-            id="inputGroupFile01"
-            onChange={(e) => setData({ ...data, image: e.target.files[0] })}
+            disabled
           />
         </div>
         <div className="col-12">
           <button type="submit" className="btn btn-primary">
-            Create
+            Update
           </button>
         </div>
       </form>
